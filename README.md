@@ -1,4 +1,4 @@
-# TP2 Intéractivité ludique
+# TP3 Intéractivité ludique
 Projet TP3 réalisé dans le cadre du cours d’Interactivité ludique  
 
 ## 🎨 Crédits des Sources
