@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://e4boqlh7bvm2"]
+
+[ext_resource type="Script" uid="uid://c5b8pxhpgavq3" path="res://power_speed.gd" id="1_rnpki"]
+[ext_resource type="Texture2D" uid="uid://3s0gsrynkul4" path="res://assets/images/sprites/gui_assets/PNG/Victory/Star.png" id="2_rnpki"]
+[ext_resource type="AudioStream" uid="uid://py4uq1oyx0ui" path="res://assets/audio/effet_sonore/8-bit-powerup.mp3" id="3_p7uhn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q7wqw"]
+size = Vector2(89, 86)
+
+[node name="power_star" type="Area2D"]
+script = ExtResource("1_rnpki")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0.5, -7)
+scale = Vector2(1.53448, 1.59259)
+texture = ExtResource("2_rnpki")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, -7)
+shape = SubResource("RectangleShape2D_q7wqw")
+
+[node name="powerSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_p7uhn")
+volume_db = -10.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

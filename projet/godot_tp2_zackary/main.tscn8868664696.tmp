@@ -1,0 +1,40 @@
+[gd_scene load_steps=8 format=3 uid="uid://da70e7m1m4s74"]
+
+[ext_resource type="Script" uid="uid://cmipm5d8iepdu" path="res://main.gd" id="1_7mycd"]
+[ext_resource type="PackedScene" uid="uid://ca88u0vt41f7m" path="res://map.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://da357ff2ubfdp" path="res://tank_1.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://7pap8ejo7bna" path="res://tank_2.tscn" id="3_h2yge"]
+[ext_resource type="AudioStream" uid="uid://bvdee8r30bfwg" path="res://assets/audio/musique/retro_tank_8_bit.mp3" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://e4boqlh7bvm2" path="res://power_star.tscn" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://c7mbnkkpw0du0" path="res://hud.tscn" id="7_272bh"]
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_7mycd")
+
+[node name="map" parent="." instance=ExtResource("1_ig7tw")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(15, 54)
+offset = Vector2(0, 11)
+zoom = Vector2(0.45, 0.45)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_1bvp3")
+volume_db = -40.0
+autoplay = true
+parameters/looping = true
+
+[node name="tank" type="Node2D" parent="." groups=["tank"]]
+
+[node name="tank_1" parent="tank" groups=["tank"] instance=ExtResource("2_0xm2m")]
+position = Vector2(-138, -531)
+rotation = -1.5708
+
+[node name="tank_2" parent="tank" groups=["tank"] instance=ExtResource("3_h2yge")]
+position = Vector2(119, 658)
+rotation = 1.5708
+
+[node name="power_star" parent="." instance=ExtResource("5_lquwl")]
+position = Vector2(-91, 97)
+
+[node name="HUD" parent="." instance=ExtResource("7_272bh")]

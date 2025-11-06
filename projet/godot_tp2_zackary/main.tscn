@@ -1,0 +1,90 @@
+[gd_scene load_steps=10 format=3 uid="uid://da70e7m1m4s74"]
+
+[ext_resource type="PackedScene" uid="uid://ca88u0vt41f7m" path="res://map.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://cmipm5d8iepdu" path="res://main.gd" id="1_kek77"]
+[ext_resource type="PackedScene" uid="uid://da357ff2ubfdp" path="res://tank_1.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://7pap8ejo7bna" path="res://tank_2.tscn" id="3_h2yge"]
+[ext_resource type="AudioStream" uid="uid://bvdee8r30bfwg" path="res://assets/audio/musique/retro_tank_8_bit.mp3" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://e4boqlh7bvm2" path="res://power_star.tscn" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://1a4672vw6xnt" path="res://assets/images/sprites/heart_icons/heart.png" id="6_7mycd"]
+[ext_resource type="Script" uid="uid://cvp0l1qjdmwxd" path="res://game_manager.gd" id="7_272bh"]
+[ext_resource type="PackedScene" uid="uid://wrhlvv21wnjc" path="res://pause_menu.tscn" id="8_5vw27"]
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_kek77")
+
+[node name="map" parent="." instance=ExtResource("1_ig7tw")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(15, 54)
+offset = Vector2(0, 11)
+zoom = Vector2(0.45, 0.45)
+
+[node name="background_song" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_1bvp3")
+volume_db = -15.0
+autoplay = true
+parameters/looping = true
+
+[node name="tank" type="Node2D" parent="." groups=["tank"]]
+
+[node name="tank_1" parent="tank" groups=["tank"] instance=ExtResource("2_0xm2m")]
+position = Vector2(-138, -531)
+rotation = -1.5708
+heart1_path = NodePath("../../CanvasLayer/HeartA1")
+heart2_path = NodePath("../../CanvasLayer/HeartA2")
+heart3_path = NodePath("../../CanvasLayer/HeartA3")
+
+[node name="tank_2" parent="tank" groups=["tank"] instance=ExtResource("3_h2yge")]
+position = Vector2(119, 658)
+rotation = 1.5708
+heart1_path = NodePath("../../CanvasLayer/HeartB1")
+heart2_path = NodePath("../../CanvasLayer/HeartB2")
+heart3_path = NodePath("../../CanvasLayer/HeartB3")
+
+[node name="power_star" parent="." instance=ExtResource("5_lquwl")]
+position = Vector2(-91, 97)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." groups=["tank"]]
+
+[node name="HeartA1" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(32, 32)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("6_7mycd")
+
+[node name="HeartA2" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(64, 32)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("6_7mycd")
+
+[node name="HeartA3" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(96, 32)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("6_7mycd")
+
+[node name="HeartB1" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(1060.8, 620.8)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("6_7mycd")
+
+[node name="HeartB2" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(1092.8, 620.8)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("6_7mycd")
+
+[node name="HeartB3" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(1124.8, 620.8)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("6_7mycd")
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("8_5vw27")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameManager" type="Node2D" parent="." groups=["tank"]]
+script = ExtResource("7_272bh")

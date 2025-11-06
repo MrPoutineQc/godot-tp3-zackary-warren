@@ -1,0 +1,114 @@
+[gd_scene load_steps=24 format=3 uid="uid://drllmew72rci8"]
+
+[ext_resource type="Script" uid="uid://d1n3x21pyrm55" path="res://area_2d.gd" id="1_v8qja"]
+[ext_resource type="Texture2D" uid="uid://4u05v70ggq68" path="res://assets/images/sprites/battle-tank-assets/PNG/Effects/Medium_Shell.png" id="2_t4vbm"]
+[ext_resource type="Texture2D" uid="uid://bpg5gy6k8ftyj" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_A.png" id="3_4bibm"]
+[ext_resource type="Texture2D" uid="uid://12q12ywplr0k" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_B.png" id="4_as0xd"]
+[ext_resource type="Texture2D" uid="uid://c8ybjwb3b1dgg" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_C.png" id="5_2eep6"]
+[ext_resource type="Texture2D" uid="uid://bxm6evd5qrt5v" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_D.png" id="6_qd0d2"]
+[ext_resource type="Texture2D" uid="uid://dkx5am37cinsr" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_E.png" id="7_4r2mu"]
+[ext_resource type="Texture2D" uid="uid://vu3oma7sjqd6" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_F.png" id="8_o7457"]
+[ext_resource type="Texture2D" uid="uid://c5xtenvjhuooq" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_G.png" id="9_ugsrq"]
+[ext_resource type="Texture2D" uid="uid://dd3fbijlu2yst" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_H.png" id="10_51pxt"]
+[ext_resource type="AudioStream" uid="uid://2k3e6wtxmnnk" path="res://assets/audio/effet_sonore/8-bit-explosion.mp3" id="11_as0xd"]
+[ext_resource type="AudioStream" uid="uid://dlysgudlvhpir" path="res://assets/audio/effet_sonore/8-bit-explosion-tank.mp3" id="12_2eep6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bibm"]
+atlas = ExtResource("3_4bibm")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_as0xd"]
+atlas = ExtResource("4_as0xd")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2eep6"]
+atlas = ExtResource("5_2eep6")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qd0d2"]
+atlas = ExtResource("6_qd0d2")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4r2mu"]
+atlas = ExtResource("7_4r2mu")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o7457"]
+atlas = ExtResource("8_o7457")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ugsrq"]
+atlas = ExtResource("9_ugsrq")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51pxt"]
+atlas = ExtResource("10_51pxt")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_05w2j"]
+atlas = ExtResource("2_t4vbm")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_05w2j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4bibm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_as0xd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2eep6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qd0d2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4r2mu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o7457")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ugsrq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51pxt")
+}],
+"loop": false,
+"name": &"explosion",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_05w2j")
+}],
+"loop": false,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2b2rl"]
+radius = 8.0
+height = 38.0
+
+[node name="bullet" type="Area2D"]
+script = ExtResource("1_v8qja")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_05w2j")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_2b2rl")
+
+[node name="explosion_obus" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_as0xd")
+volume_db = 10.0
+
+[node name="explosionSoundTank" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_2eep6")
+volume_db = -5.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
