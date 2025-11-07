@@ -27,6 +27,10 @@ volume_db = -15.0
 autoplay = true
 parameters/looping = true
 
+[node name="victory_audio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_4c57u")
+volume_db = -15.0
+
 [node name="tank" type="Node2D" parent="." groups=["tank"]]
 
 [node name="tank_1" parent="tank" groups=["tank"] instance=ExtResource("2_0xm2m")]
@@ -43,7 +47,7 @@ heart1_path = NodePath("../../CanvasLayer/HeartB1")
 heart2_path = NodePath("../../CanvasLayer/HeartB2")
 heart3_path = NodePath("../../CanvasLayer/HeartB3")
 
-[node name="power_star" parent="." groups=["tank"] instance=ExtResource("5_lquwl")]
+[node name="power_star" parent="." instance=ExtResource("5_lquwl")]
 position = Vector2(-91, 97)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." groups=["tank"]]
@@ -86,25 +90,6 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="VictoryLabel" type="Label" parent="CanvasLayer"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -89.5
-offset_top = -11.5
-offset_right = 89.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "LE JOUEUR 1 À GAGNÉ !"
-
-[node name="VictorySound" type="AudioStreamPlayer2D" parent="CanvasLayer"]
-stream = ExtResource("4_4c57u")
-volume_db = -15.0
 
 [node name="GameManager" type="Node2D" parent="." groups=["tank"]]
 script = ExtResource("7_272bh")

@@ -15,9 +15,12 @@ extends CharacterBody2D
 var lives := max_lives
 var respawn_position: Vector2
 
-# --- Autres variables (Coeur, Point de sortie de la balle)---
+# --- Autres variables ---
 @onready var muzzle = $muzzle
 @onready var move_sound = $MoveSound
+var blink_tween: Tween = null
+var is_ghost_mode := false
+var ghost_mode_id: int = 0
 @onready var hearts = [
 	get_node_or_null(heart1_path),
 	get_node_or_null(heart2_path),
@@ -26,6 +29,10 @@ var respawn_position: Vector2
 var can_shoot := true
 var base_scale := Vector2(1, 1)
 var speed := base_speed
+
+# --- Identifiants pour les bonus (empêche les anciens timers d’agir) ---
+var speed_bonus_id: int = 0
+var size_bonus_id: int = 0
 
 # --- Fonction : Ready ---
 func _ready():
@@ -38,22 +45,21 @@ func _ready():
 func _physics_process(delta):
 	var direction := 0.0
 	var rotation_dir := 0.0
-	
-# --- Son Déplacement ---
-	var moving = Input.is_action_pressed("a_up") or Input.is_action_pressed("a_down") or Input.is_action_pressed("a_left") or Input.is_action_pressed("a_right") 
+
+	# --- Son de déplacement ---
+	var moving = Input.is_action_pressed("a_up") or Input.is_action_pressed("a_down") or Input.is_action_pressed("a_left") or Input.is_action_pressed("a_right")
 
 	if moving:
 		if not move_sound.playing:
 			move_sound.play()
-		move_sound.volume_db = -30	
+		move_sound.volume_db = -30
 	else:
 		if move_sound.playing:
 			move_sound.stop()
 
-# --- Déplacement ---
+	# --- Déplacement ---
 	if Input.is_action_pressed("a_up"):
 		direction = 1
-		
 	elif Input.is_action_pressed("a_down"):
 		direction = -1
 
@@ -97,9 +103,10 @@ func take_damage():
 
 		await get_tree().create_timer(0.3).timeout
 
-		var gms := get_tree().get_nodes_in_group("game_manager")
-		if gms.size() > 0 and gms[0].has_method("reset_game"):
-			gms[0].reset_game()
+		var gm = get_tree().get_first_node_in_group("game_manager")
+		if gm:
+			var winner_name = "Player 2" if name == "tank_1" else "Player 1"
+			gm.declare_winner(winner_name)
 
 # --- Fonction : Mettre à jour les cœurs ---
 func _update_hearts():
@@ -114,11 +121,15 @@ func _update_hearts():
 
 # --- Fonction : Respawn ---
 func respawn():
+	disable_ghost_mode()
+	speed_bonus_id += 1
+	size_bonus_id += 1
+	ghost_mode_id += 1
+
 	await get_tree().create_timer(0.3).timeout
 	position = respawn_position
 	rotation = deg_to_rad(-90)
 	velocity = Vector2.ZERO
-
 	speed = base_speed
 	scale = base_scale
 	modulate = Color(1, 1, 1)
@@ -126,15 +137,63 @@ func respawn():
 
 # --- Fonction : Bonus de vitesse ---
 func apply_speed_bonus(multiplier: float, duration: float):
+	speed_bonus_id += 1
+	var id = speed_bonus_id
+
 	speed = base_speed * multiplier
-	modulate = Color(1, 1, 0)
-	await get_tree().create_timer(duration).timeout
-	speed = base_speed
-	modulate = Color(1, 1, 1)
+	modulate = Color(1, 1, 0) # visuel temporaire
+
+	var timer = get_tree().create_timer(duration)
+	await timer.timeout
+
+	if id == speed_bonus_id:
+		speed = base_speed
+		modulate = Color(1, 1, 1)
 
 # --- Fonction : Bonus de taille ---
 func apply_size_bonus(scale_factor: float, duration: float):
+	size_bonus_id += 1
+	var id = size_bonus_id
+
 	scale = base_scale * scale_factor
-	await get_tree().create_timer(duration).timeout
-	scale = base_scale
-	modulate = Color(1, 1, 1)
+
+	var timer = get_tree().create_timer(duration)
+	await timer.timeout
+
+	if id == size_bonus_id:
+		scale = base_scale
+		modulate = Color(1, 1, 1)
+
+# --- Mode traversée de murs ---
+func enable_ghost_mode(duration: float):
+	if is_ghost_mode:
+		# si le tank est déjà en fantôme, on redémarre le timer proprement
+		ghost_mode_id += 1
+	else:
+		is_ghost_mode = true
+		modulate = Color(0.6, 0.8, 1.0, 0.6)
+		set_collision_mask_value(1, false)
+		set_collision_layer_value(1, false)
+
+		blink_tween = create_tween().set_loops()
+		blink_tween.tween_property(self, "modulate:a", 0.3, 0.3)
+		blink_tween.tween_property(self, "modulate:a", 0.6, 0.3)
+
+	ghost_mode_id += 1
+	var id = ghost_mode_id
+
+	var timer = get_tree().create_timer(duration)
+	await timer.timeout
+
+	if id == ghost_mode_id:
+		disable_ghost_mode()
+
+func disable_ghost_mode():
+	if blink_tween and blink_tween.is_running():
+		blink_tween.kill()
+		blink_tween = null
+
+	is_ghost_mode = false
+	modulate = Color(1, 1, 1, 1)
+	set_collision_mask_value(1, true)
+	set_collision_layer_value(1, true)

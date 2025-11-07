@@ -42,3 +42,27 @@ func reset_game():
 	print("Le jeu a redémarré")
 	await get_tree().create_timer(0.5).timeout
 	get_tree().reload_current_scene()
+
+# --- Gestion de victoire ---
+func declare_winner(player_name: String):
+	print("%s a gagné !" % player_name)
+
+	var victory_label = get_node_or_null("/root/main/CanvasLayer/VictoryLabel")
+	var victory_sound = get_node_or_null("/root/main/CanvasLayer/VictorySound")
+
+	if victory_label:
+		victory_label.text = "%s WINS!" % player_name
+		victory_label.visible = true
+
+		# Animation du texte (zoom rapide + fade-in)
+		victory_label.modulate.a = 0.0
+		var tween = create_tween()
+		tween.tween_property(victory_label, "modulate:a", 1.0, 0.5)
+		tween.tween_property(victory_label, "scale", Vector2(1.2, 1.2), 0.4)
+		tween.tween_property(victory_label, "scale", Vector2(1.0, 1.0), 0.3)
+
+	if victory_sound:
+		victory_sound.play()
+
+	await get_tree().create_timer(3.0).timeout
+	get_tree().reload_current_scene()
