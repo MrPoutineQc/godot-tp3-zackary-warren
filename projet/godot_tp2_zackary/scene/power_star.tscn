@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://e4boqlh7bvm2"]
 
-[ext_resource type="Script" uid="uid://c5b8pxhpgavq3" path="res://power_speed.gd" id="1_rnpki"]
+[ext_resource type="Script" uid="uid://c5b8pxhpgavq3" path="res://scene/power_speed.gd" id="1_rnpki"]
 [ext_resource type="Texture2D" uid="uid://3s0gsrynkul4" path="res://assets/images/sprites/gui_assets/PNG/Victory/Star.png" id="2_rnpki"]
 [ext_resource type="AudioStream" uid="uid://py4uq1oyx0ui" path="res://assets/audio/effet_sonore/8-bit-powerup.mp3" id="3_p7uhn"]
 

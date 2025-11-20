@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://7pap8ejo7bna"]
 
-[ext_resource type="Script" uid="uid://bx6o8cl4b0dsp" path="res://body_blue_tank.gd" id="1_3gsbe"]
+[ext_resource type="Script" uid="uid://bx6o8cl4b0dsp" path="res://scene/body_blue_tank.gd" id="1_3gsbe"]
 [ext_resource type="Texture2D" uid="uid://cwuinf7jux18h" path="res://assets/images/sprites/battle-tank-assets/tank_2.png" id="1_j2u8f"]
-[ext_resource type="PackedScene" uid="uid://drllmew72rci8" path="res://bullet.tscn" id="2_8t446"]
+[ext_resource type="PackedScene" uid="uid://drllmew72rci8" path="res://scene/bullet.tscn" id="2_8t446"]
 [ext_resource type="AudioStream" uid="uid://ci0y6aj8pf61x" path="res://assets/audio/effet_sonore/tank_moving.mp3" id="4_070ym"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3gsbe"]

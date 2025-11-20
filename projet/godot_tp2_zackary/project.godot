@@ -10,9 +10,13 @@ config_version=5
 
 [application]
 
-config/name="godot_tp2_zackary"
+config/name="godot_tp3_zackary"
 run/main_scene="uid://da70e7m1m4s74"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+
+[autoload]
+
+GlobalState="*res://global_state.gd"
 
 [display]
 

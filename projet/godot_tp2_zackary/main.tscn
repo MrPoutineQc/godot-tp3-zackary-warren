@@ -1,18 +1,19 @@
 [gd_scene load_steps=11 format=3 uid="uid://da70e7m1m4s74"]
 
-[ext_resource type="PackedScene" uid="uid://ca88u0vt41f7m" path="res://map.tscn" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://cmipm5d8iepdu" path="res://main.gd" id="1_kek77"]
-[ext_resource type="PackedScene" uid="uid://da357ff2ubfdp" path="res://tank_1.tscn" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://7pap8ejo7bna" path="res://tank_2.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://ca88u0vt41f7m" path="res://scene/map.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://da357ff2ubfdp" path="res://scene/tank_1.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://7pap8ejo7bna" path="res://scene/tank_2.tscn" id="3_h2yge"]
 [ext_resource type="AudioStream" uid="uid://bvdee8r30bfwg" path="res://assets/audio/musique/retro_tank_8_bit.mp3" id="4_1bvp3"]
-[ext_resource type="AudioStream" uid="uid://cuwvq1a3sr7xc" path="res://assets/audio/effet_sonore/victory.mp3" id="4_4c57u"]
-[ext_resource type="PackedScene" uid="uid://e4boqlh7bvm2" path="res://power_star.tscn" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://e4boqlh7bvm2" path="res://scene/power_star.tscn" id="5_lquwl"]
 [ext_resource type="Texture2D" uid="uid://1a4672vw6xnt" path="res://assets/images/sprites/heart_icons/heart.png" id="6_7mycd"]
-[ext_resource type="Script" uid="uid://cvp0l1qjdmwxd" path="res://game_manager.gd" id="7_272bh"]
-[ext_resource type="PackedScene" uid="uid://wrhlvv21wnjc" path="res://pause_menu.tscn" id="8_5vw27"]
+[ext_resource type="Script" uid="uid://cvp0l1qjdmwxd" path="res://scene/game_manager.gd" id="7_272bh"]
+[ext_resource type="PackedScene" uid="uid://dpbs371xypvu1" path="res://scene/keyghost.tscn" id="7_dg77c"]
+[ext_resource type="PackedScene" uid="uid://wrhlvv21wnjc" path="res://scene/pause_menu.tscn" id="8_5vw27"]
+
+[sub_resource type="GDScript" id="GDScript_kek77"]
 
 [node name="main" type="Node2D"]
-script = ExtResource("1_kek77")
+script = SubResource("GDScript_kek77")
 
 [node name="map" parent="." instance=ExtResource("1_ig7tw")]
 
@@ -29,14 +30,14 @@ parameters/looping = true
 
 [node name="tank" type="Node2D" parent="." groups=["tank"]]
 
-[node name="tank_1" parent="tank" groups=["tank"] instance=ExtResource("2_0xm2m")]
+[node name="body_orange_tank" parent="tank" groups=["tank"] instance=ExtResource("2_0xm2m")]
 position = Vector2(-138, -531)
 rotation = -1.5708
 heart1_path = NodePath("../../CanvasLayer/HeartA1")
 heart2_path = NodePath("../../CanvasLayer/HeartA2")
 heart3_path = NodePath("../../CanvasLayer/HeartA3")
 
-[node name="tank_2" parent="tank" groups=["tank"] instance=ExtResource("3_h2yge")]
+[node name="body_blue_tank" parent="tank" groups=["tank"] instance=ExtResource("3_h2yge")]
 position = Vector2(119, 658)
 rotation = 1.5708
 heart1_path = NodePath("../../CanvasLayer/HeartB1")
@@ -45,6 +46,9 @@ heart3_path = NodePath("../../CanvasLayer/HeartB3")
 
 [node name="power_star" parent="." groups=["tank"] instance=ExtResource("5_lquwl")]
 position = Vector2(-91, 97)
+
+[node name="keyghost" parent="." groups=["tank"] instance=ExtResource("7_dg77c")]
+position = Vector2(-784, 96)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." groups=["tank"]]
 
@@ -87,24 +91,19 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VictoryLabel" type="Label" parent="CanvasLayer"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -89.5
-offset_top = -11.5
-offset_right = 89.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "LE JOUEUR 1 À GAGNÉ !"
+[node name="KeyDisplay1" type="Label" parent="CanvasLayer"]
+offset_left = 9.0
+offset_top = 63.0
+offset_right = 110.0
+offset_bottom = 86.0
+text = "🔑 CLÉ: NON"
 
-[node name="VictorySound" type="AudioStreamPlayer2D" parent="CanvasLayer"]
-stream = ExtResource("4_4c57u")
-volume_db = -15.0
+[node name="KeyDisplay2" type="Label" parent="CanvasLayer"]
+offset_left = 1042.0
+offset_top = 576.0
+offset_right = 1143.0
+offset_bottom = 599.0
+text = "🔑 CLÉ: NON"
 
 [node name="GameManager" type="Node2D" parent="." groups=["tank"]]
 script = ExtResource("7_272bh")

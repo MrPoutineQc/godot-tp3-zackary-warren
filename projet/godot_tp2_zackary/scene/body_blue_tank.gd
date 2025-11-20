@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var base_speed := 150.0
 @export var rotation_speed := 3.0
 @export var bullet_scene: PackedScene
-@export var shoot_action := "a_shoot"
+@export var shoot_action := "b_shoot"
 @export var shoot_cooldown := 0.5
 
 # --- Système de vies ---
@@ -30,16 +30,26 @@ var can_shoot := true
 var base_scale := Vector2(1, 1)
 var speed := base_speed
 
-# --- Identifiants pour les bonus (empêche les anciens timers d’agir) ---
+# --- Identifiants pour les bonus ---
 var speed_bonus_id: int = 0
 var size_bonus_id: int = 0
+
+# --- Variables pour la clé Ghost ---
+var has_ghost_key := false
+@onready var key_display_label: Label = null
 
 # --- Fonction : Ready ---
 func _ready():
 	add_to_group("tank")
-	respawn_position = Vector2(-138, -531)
+	respawn_position = Vector2(119, 658)
 	base_scale = scale
 	_update_hearts()
+
+	# --- Initialiser l'affichage des clés dans le HUD ---
+	# Ici on suppose que le tank bleu correspond à "Player 2"
+	key_display_label = get_node_or_null("/root/main/CanvasLayer/KeyDisplay2")
+
+	_update_key_display()
 
 # --- Fonction : Mouvement et tir ---
 func _physics_process(delta):
@@ -47,7 +57,7 @@ func _physics_process(delta):
 	var rotation_dir := 0.0
 
 	# --- Son de déplacement ---
-	var moving = Input.is_action_pressed("a_up") or Input.is_action_pressed("a_down") or Input.is_action_pressed("a_left") or Input.is_action_pressed("a_right")
+	var moving = Input.is_action_pressed("b_up") or Input.is_action_pressed("b_down") or Input.is_action_pressed("b_left") or Input.is_action_pressed("b_right")
 
 	if moving:
 		if not move_sound.playing:
@@ -58,14 +68,14 @@ func _physics_process(delta):
 			move_sound.stop()
 
 	# --- Déplacement ---
-	if Input.is_action_pressed("a_up"):
+	if Input.is_action_pressed("b_up"):
 		direction = 1
-	elif Input.is_action_pressed("a_down"):
+	elif Input.is_action_pressed("b_down"):
 		direction = -1
 
-	if Input.is_action_pressed("a_left"):
+	if Input.is_action_pressed("b_left"):
 		rotation_dir = -1
-	elif Input.is_action_pressed("a_right"):
+	elif Input.is_action_pressed("b_right"):
 		rotation_dir = 1
 
 	rotation += rotation_dir * rotation_speed * delta
@@ -75,14 +85,13 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed(shoot_action) and can_shoot:
 		_start_shoot()
 
-# --- Fonction : Démarrer le tir ---
+# --- Tir ---
 func _start_shoot() -> void:
 	can_shoot = false
 	_spawn_bullet()
 	await get_tree().create_timer(shoot_cooldown).timeout
 	can_shoot = true
 
-# --- Fonction : Créer une balle ---
 func _spawn_bullet() -> void:
 	var bullet = bullet_scene.instantiate()
 	bullet.position = muzzle.global_position
@@ -90,7 +99,7 @@ func _spawn_bullet() -> void:
 	bullet.shooter = self
 	get_tree().current_scene.add_child(bullet)
 
-# --- GÉRER LES DÉGÂTS ---
+# --- Dégâts ---
 func take_damage():
 	lives -= 1
 	_update_hearts()
@@ -105,10 +114,10 @@ func take_damage():
 
 		var gm = get_tree().get_first_node_in_group("game_manager")
 		if gm:
-			var winner_name = "Player 2" if name == "tank_1" else "Player 1"
+			var winner_name = "Tank Bleu" if name == "tank_1" else "Tank Orange"
 			gm.declare_winner(winner_name)
 
-# --- Fonction : Mettre à jour les cœurs ---
+# --- Coeurs ---
 func _update_hearts():
 	for i in range(hearts.size()):
 		var h = hearts[i]
@@ -119,29 +128,31 @@ func _update_hearts():
 		else:
 			h.texture = preload("res://assets/images/sprites/heart_icons/heart_black.png")
 
-# --- Fonction : Respawn ---
+# --- Respawn ---
 func respawn():
 	disable_ghost_mode()
 	speed_bonus_id += 1
 	size_bonus_id += 1
 	ghost_mode_id += 1
+	has_ghost_key = false
+	_update_key_display()
 
 	await get_tree().create_timer(0.3).timeout
 	position = respawn_position
-	rotation = deg_to_rad(-90)
+	rotation = deg_to_rad(90)
 	velocity = Vector2.ZERO
 	speed = base_speed
 	scale = base_scale
 	modulate = Color(1, 1, 1)
 	show()
 
-# --- Fonction : Bonus de vitesse ---
+# --- Bonus vitesse ---
 func apply_speed_bonus(multiplier: float, duration: float):
 	speed_bonus_id += 1
 	var id = speed_bonus_id
 
 	speed = base_speed * multiplier
-	modulate = Color(1, 1, 0) # visuel temporaire
+	modulate = Color(1, 1, 0)
 
 	var timer = get_tree().create_timer(duration)
 	await timer.timeout
@@ -150,7 +161,7 @@ func apply_speed_bonus(multiplier: float, duration: float):
 		speed = base_speed
 		modulate = Color(1, 1, 1)
 
-# --- Fonction : Bonus de taille ---
+# --- Bonus taille ---
 func apply_size_bonus(scale_factor: float, duration: float):
 	size_bonus_id += 1
 	var id = size_bonus_id
@@ -164,10 +175,9 @@ func apply_size_bonus(scale_factor: float, duration: float):
 		scale = base_scale
 		modulate = Color(1, 1, 1)
 
-# --- Mode traversée de murs ---
+# --- Mode fantôme ---
 func enable_ghost_mode(duration: float):
 	if is_ghost_mode:
-		# si le tank est déjà en fantôme, on redémarre le timer proprement
 		ghost_mode_id += 1
 	else:
 		is_ghost_mode = true
@@ -197,3 +207,15 @@ func disable_ghost_mode():
 	modulate = Color(1, 1, 1, 1)
 	set_collision_mask_value(1, true)
 	set_collision_layer_value(1, true)
+
+# --- Affichage de la clé ---
+func _update_key_display():
+	if key_display_label == null:
+		return
+
+	if has_ghost_key:
+		key_display_label.text = "🔑 CLÉ: OUI"
+		key_display_label.modulate = Color.YELLOW
+	else:
+		key_display_label.text = "🔑 CLÉ: NON"
+		key_display_label.modulate = Color.WHITE

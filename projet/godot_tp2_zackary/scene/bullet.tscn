@@ -1,6 +1,6 @@
 [gd_scene load_steps=24 format=3 uid="uid://drllmew72rci8"]
 
-[ext_resource type="Script" uid="uid://d1n3x21pyrm55" path="res://area_2d.gd" id="1_v8qja"]
+[ext_resource type="Script" uid="uid://d1n3x21pyrm55" path="res://scene/area_2d.gd" id="1_v8qja"]
 [ext_resource type="Texture2D" uid="uid://4u05v70ggq68" path="res://assets/images/sprites/battle-tank-assets/PNG/Effects/Medium_Shell.png" id="2_t4vbm"]
 [ext_resource type="Texture2D" uid="uid://bpg5gy6k8ftyj" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_A.png" id="3_4bibm"]
 [ext_resource type="Texture2D" uid="uid://12q12ywplr0k" path="res://assets/images/sprites/battle-tank-assets/SCML/Effects/Explosion_B.png" id="4_as0xd"]

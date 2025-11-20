@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var base_speed := 150.0
 @export var rotation_speed := 3.0
 @export var bullet_scene: PackedScene
-@export var shoot_action := "b_shoot"
+@export var shoot_action := "a_shoot"
 @export var shoot_cooldown := 0.5
 
 # --- Système de vies ---
@@ -30,16 +30,28 @@ var can_shoot := true
 var base_scale := Vector2(1, 1)
 var speed := base_speed
 
-# --- Identifiants pour les bonus (empêche les anciens timers d’agir) ---
+# --- Identifiants pour les bonus (empêche les anciens timers d'agir) ---
 var speed_bonus_id: int = 0
 var size_bonus_id: int = 0
+
+# --- Variables pour la clé Ghost ---
+var has_ghost_key := false
+@onready var key_display_label: Label = null
 
 # --- Fonction : Ready ---
 func _ready():
 	add_to_group("tank")
-	respawn_position = Vector2(119, 658)
+	respawn_position = Vector2(-138, -531)
 	base_scale = scale
 	_update_hearts()
+	
+	# --- Initialiser l'affichage des clés dans le HUD ---
+	if name == "tank_1":
+		key_display_label = get_node_or_null("/root/main/CanvasLayer/KeyDisplay1")
+	else:
+		key_display_label = get_node_or_null("/root/main/CanvasLayer/KeyDisplay2")
+	
+	_update_key_display()
 
 # --- Fonction : Mouvement et tir ---
 func _physics_process(delta):
@@ -47,7 +59,7 @@ func _physics_process(delta):
 	var rotation_dir := 0.0
 
 	# --- Son de déplacement ---
-	var moving = Input.is_action_pressed("b_up") or Input.is_action_pressed("b_down") or Input.is_action_pressed("b_left") or Input.is_action_pressed("b_right")
+	var moving = Input.is_action_pressed("a_up") or Input.is_action_pressed("a_down") or Input.is_action_pressed("a_left") or Input.is_action_pressed("a_right")
 
 	if moving:
 		if not move_sound.playing:
@@ -58,14 +70,14 @@ func _physics_process(delta):
 			move_sound.stop()
 
 	# --- Déplacement ---
-	if Input.is_action_pressed("b_up"):
+	if Input.is_action_pressed("a_up"):
 		direction = 1
-	elif Input.is_action_pressed("b_down"):
+	elif Input.is_action_pressed("a_down"):
 		direction = -1
 
-	if Input.is_action_pressed("b_left"):
+	if Input.is_action_pressed("a_left"):
 		rotation_dir = -1
-	elif Input.is_action_pressed("b_right"):
+	elif Input.is_action_pressed("a_right"):
 		rotation_dir = 1
 
 	rotation += rotation_dir * rotation_speed * delta
@@ -105,7 +117,7 @@ func take_damage():
 
 		var gm = get_tree().get_first_node_in_group("game_manager")
 		if gm:
-			var winner_name = "Player 2" if name == "tank_1" else "Player 1"
+			var winner_name = "Tank Orange" if name == "tank_1" else "Tank Bleu"
 			gm.declare_winner(winner_name)
 
 # --- Fonction : Mettre à jour les cœurs ---
@@ -125,10 +137,12 @@ func respawn():
 	speed_bonus_id += 1
 	size_bonus_id += 1
 	ghost_mode_id += 1
+	has_ghost_key = false
+	_update_key_display()
 
 	await get_tree().create_timer(0.3).timeout
 	position = respawn_position
-	rotation = deg_to_rad(90)
+	rotation = deg_to_rad(-90)
 	velocity = Vector2.ZERO
 	speed = base_speed
 	scale = base_scale
@@ -197,3 +211,15 @@ func disable_ghost_mode():
 	modulate = Color(1, 1, 1, 1)
 	set_collision_mask_value(1, true)
 	set_collision_layer_value(1, true)
+
+# --- Fonction : Afficher l'état de la clé ---
+func _update_key_display():
+	if key_display_label == null:
+		return
+	
+	if has_ghost_key:
+		key_display_label.text = "🔑 CLÉ: OUI"
+		key_display_label.modulate = Color.YELLOW
+	else:
+		key_display_label.text = "🔑 CLÉ: NON"
+		key_display_label.modulate = Color.WHITE

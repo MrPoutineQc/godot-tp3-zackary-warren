@@ -9,6 +9,7 @@ func _ready():
 	$CollisionShape2D.disabled = true
 	await get_tree().create_timer(0.1).timeout
 	$CollisionShape2D.disabled = false
+
 	if "idle" in $AnimatedSprite2D.sprite_frames.get_animation_names():
 		$AnimatedSprite2D.play("idle")
 	else:
@@ -25,18 +26,22 @@ func _on_body_entered(body):
 	if exploding:
 		return
 	exploding = true
+
 	$explosion_obus.play()
-	$CollisionShape2D.disabled = true
+
+	# ⚠️ Correction : différer la désactivation du CollisionShape
+	$CollisionShape2D.call_deferred("set_disabled", true)
+
 	set_physics_process(false)
 
 	if body.is_in_group("tank") and body != shooter and body.has_method("take_damage"):
 		body.take_damage()
 		$explosionSoundTank.play()
-		
+
 		var gms := get_tree().get_nodes_in_group("game_manager")
 		if gms.size() > 0 and gms[0].has_method("respawn_all_tanks"):
 			gms[0].respawn_all_tanks()
-	else: 
+	else:
 		$explosion_obus.play()
 
 	# Explosion puis suppression

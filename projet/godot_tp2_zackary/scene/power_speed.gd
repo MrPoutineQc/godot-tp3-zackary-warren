@@ -17,14 +17,14 @@ func _ready():
 	start_position = position
 	active = true
 
-	# ✅ Assure que le signal est bien connecté
+	# Assure que le signal est bien connecté
 	if not is_connected("body_entered", Callable(self, "_on_body_entered")):
 		connect("body_entered", Callable(self, "_on_body_entered"))
 
-	# 🟢 Relance les effets visuels de base
+	# Relance les effets visuels de base
 	_start_pulse()
 
-	# 🔁 Remet à zéro après un reload de scène
+	# Remet à zéro après un reload de scène
 	call_deferred("_reset_star")
 
 # --- Fonction : Collision avec un tank ---
@@ -41,14 +41,13 @@ func _on_body_entered(body):
 	body.disable_ghost_mode() # 🛑 coupe un effet restant s’il existait
 	body.apply_speed_bonus(speed_bonus, duration)
 	body.apply_size_bonus(size_bonus, duration)
-	body.enable_ghost_mode(duration)
+	#body.enable_ghost_mode(duration)
 
 	# --- Stop la pulsation ---
 	if pulse_tween and pulse_tween.is_running():
 		pulse_tween.kill()
 
-	# --- 💚 Effet visuel vert au ramassage ---
-# --- 💚 Effet visuel vert au ramassage ---
+# --- Effet visuel vert au ramassage ---
 	if sprite:
 		sprite.modulate = Color(0.3, 1.0, 0.3, 1.0)  # flash vert
 		var t = create_tween()
@@ -59,7 +58,7 @@ func _on_body_entered(body):
 	# Attend la fin du tween avant de cacher
 		await t.finished
 
-	# ✅ Désactive la collision proprement (sans bug)
+	# Désactive la collision proprement
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
 	shape.set_deferred("disabled", true)
@@ -79,7 +78,7 @@ func _reset_star():
 	set_deferred("monitorable", true)
 	shape.set_deferred("disabled", false)
 
-	# 🔁 Redémarre la pulsation d’affordance
+	# Redémarre la pulsation d’affordance
 	_start_pulse()
 
 # --- Effet visuel de pulsation ---
