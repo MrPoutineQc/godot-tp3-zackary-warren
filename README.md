@@ -1,6 +1,8 @@
 # TP3 Intéractivité ludique
 Projet TP3 réalisé dans le cadre du cours d’Interactivité ludique  
 
+La clé supprime une contrainte spatiale (mur), ce qui revient à "ouvrir" un passage qui est impossible sans.
+
 ## 🎨 Crédits des Sources
 
 - **Musique** : [Udio](https://www.udio.com/)
