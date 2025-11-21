@@ -93,15 +93,15 @@ grow_vertical = 2
 
 [node name="KeyDisplay1" type="Label" parent="CanvasLayer"]
 offset_left = 20.0
-offset_top = 63.0
+offset_top = 54.0
 offset_right = 121.0
-offset_bottom = 86.0
+offset_bottom = 77.0
 text = "CLÉ: NON"
 
 [node name="KeyDisplay2" type="Label" parent="CanvasLayer"]
-offset_left = 1049.0
+offset_left = 1046.0
 offset_top = 577.0
-offset_right = 1150.0
+offset_right = 1147.0
 offset_bottom = 600.0
 text = "CLÉ: NON"
 
