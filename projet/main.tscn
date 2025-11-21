@@ -96,14 +96,14 @@ offset_left = 9.0
 offset_top = 63.0
 offset_right = 110.0
 offset_bottom = 86.0
-text = "🔑 CLÉ: NON"
+text = "🗝️ CLÉ: NON"
 
 [node name="KeyDisplay2" type="Label" parent="CanvasLayer"]
 offset_left = 1042.0
 offset_top = 576.0
 offset_right = 1143.0
 offset_bottom = 599.0
-text = "🔑 CLÉ: NON"
+text = "🗝️ CLÉ: NON"
 
 [node name="GameManager" type="Node2D" parent="." groups=["tank"]]
 script = ExtResource("7_272bh")
