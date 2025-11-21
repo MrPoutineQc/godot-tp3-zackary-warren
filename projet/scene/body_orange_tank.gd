@@ -47,9 +47,9 @@ func _ready():
 	
 	# --- Initialiser l'affichage des clés dans le HUD ---
 	if name == "tank_1":
-		key_display_label = get_node_or_null("/root/main/CanvasLayer/KeyDisplay1")
-	else:
 		key_display_label = get_node_or_null("/root/main/CanvasLayer/KeyDisplay2")
+	else:
+		key_display_label = get_node_or_null("/root/main/CanvasLayer/KeyDisplay1")
 	
 	_update_key_display()
 

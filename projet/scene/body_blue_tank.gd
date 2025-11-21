@@ -46,7 +46,6 @@ func _ready():
 	_update_hearts()
 
 	# --- Initialiser l'affichage des clés dans le HUD ---
-	# Ici on suppose que le tank bleu correspond à "Player 2"
 	key_display_label = get_node_or_null("/root/main/CanvasLayer/KeyDisplay2")
 
 	_update_key_display()
