@@ -61,7 +61,7 @@ func _on_restart_pressed():
 # --- Fonction : Bouton Mute/Démute ---
 func _on_MuteButton_pressed():
 	var master_bus = AudioServer.get_bus_index("Master")
-	is_muted = not AudioServer.is_bus_mute(master_bus)  # lit l’état réel
+	is_muted = not AudioServer.is_bus_mute(master_bus)
 	AudioServer.set_bus_mute(master_bus, is_muted)
 	_update_mute_button_text()
 
