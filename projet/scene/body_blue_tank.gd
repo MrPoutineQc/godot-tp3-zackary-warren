@@ -213,8 +213,8 @@ func _update_key_display():
 		return
 
 	if has_ghost_key:
-		key_display_label.text = "🔑 CLÉ: OUI"
+		key_display_label.text = "🗝️ CLÉ: OUI"
 		key_display_label.modulate = Color.YELLOW
 	else:
-		key_display_label.text = "🔑 CLÉ: NON"
+		key_display_label.text = "🗝️ CLÉ: NON"
 		key_display_label.modulate = Color.WHITE

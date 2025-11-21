@@ -17,7 +17,7 @@ Projet TP3 réalisé dans le cadre du cours d’Interactivité ludique
 | Action           | Touche   |
 |------------------|----------|
 | Avancer          | `W`      |
-| Reculer          | `S`      |
+| Reculer          | `S`      w
 | Aller à gauche   | `A`      |
 | Aller à droite   | `D`      |
 | Tirer            | `Espace` |
