@@ -92,17 +92,17 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="KeyDisplay1" type="Label" parent="CanvasLayer"]
-offset_left = 9.0
+offset_left = 20.0
 offset_top = 63.0
-offset_right = 110.0
+offset_right = 121.0
 offset_bottom = 86.0
 text = "CLÉ: NON"
 
 [node name="KeyDisplay2" type="Label" parent="CanvasLayer"]
-offset_left = 1042.0
-offset_top = 576.0
-offset_right = 1143.0
-offset_bottom = 599.0
+offset_left = 1049.0
+offset_top = 577.0
+offset_right = 1150.0
+offset_bottom = 600.0
 text = "CLÉ: NON"
 
 [node name="GameManager" type="Node2D" parent="." groups=["tank"]]
