@@ -29,7 +29,6 @@ func _on_body_entered(body):
 
 	$explosion_obus.play()
 
-	# ⚠️ Correction : différer la désactivation du CollisionShape
 	$CollisionShape2D.call_deferred("set_disabled", true)
 
 	set_physics_process(false)
@@ -44,7 +43,6 @@ func _on_body_entered(body):
 	else:
 		$explosion_obus.play()
 
-	# Explosion puis suppression
 	if "explosion" in $AnimatedSprite2D.sprite_frames.get_animation_names():
 		$AnimatedSprite2D.play("explosion")
 		var cb := Callable(self, "_on_explosion_finished")
